@@ -1,34 +1,101 @@
 import React, { Component } from 'react'
 import Fetch from 'react-fetch'
+import Highcharts from 'highcharts'
+import ReactHighcharts from 'react-highcharts'
 
-class SurflineData extends Component{
-  render() {
-    React.propTypes = {
-      Location: React.PropTypes.objectOf(React.PropTypes.string),
-      Surf: React.PropTypes.any,
-      _metadata: React.PropTypes.any,
-      id: React.PropTypes.string,
-      lat: React.PropTypes.string,
-      lon: React.PropTypes.string,
-      name: React.PropTypes.string,
-      timeZoneString: React.PropTypes.string,
-      timezone: React.PropTypes.number,
+class TestComponent extends React.Component{
+  render(){
+    console.log(this.props.pineapple, 'this.propsdot pineapple faka')
+
+    let config = {
+      title: {
+          text: 'Combination chart'
+      },
+      xAxis: {
+          categories: this.props.pineapple
+      },
+      labels: {
+          items: [{
+              html: 'Total fruit consumption',
+              style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+          }]
+      },
+      series: [{
+          type: 'column',
+          name: 'Jane',
+          data: [3, 2, 1, 3, 4]
+      }, {
+          type: 'column',
+          name: 'John',
+          data: [2, 3, 5, 7, 6]
+      }, {
+          type: 'column',
+          name: 'Joe',
+          data: [4, 3, 3, 9, 0]
+      }, {
+          type: 'spline',
+          name: 'Average',
+          data: [3, 2.67, 3, 6.33, 3.33],
+          marker: {
+              lineWidth: 2,
+              lineColor: Highcharts.getOptions().colors[3],
+              fillColor: 'white'
+          }
+      }, {
+          type: 'pie',
+          name: 'Total consumption',
+          data: [{
+              name: 'Jane',
+              y: 13,
+              color: Highcharts.getOptions().colors[0] // Jane's color
+          }, {
+              name: 'John',
+              y: 23,
+              color: Highcharts.getOptions().colors[1] // John's color
+          }, {
+              name: 'Joe',
+              y: 19,
+              color: Highcharts.getOptions().colors[2] // Joe's color
+          }],
+          center: [100, 80],
+          size: 100,
+          showInLegend: false,
+          dataLabels: {
+              enabled: false
+          }
+      }]
     }
     return (
+      <div className="daHighchart">
+        <ReactHighcharts config={config} />
+      </div>
+    )
+  }
+}
+
+class SurflineData extends Component {
+  render() {
+  let forecastDates = []
+  let greatSuccess = (data) => {
+      data.Sort.dateStamp.map((el,index)=>{
+        forecastDates.push(el[0])
+        return forecastDates
+      })
+  }
+  console.log(forecastDates,'big oi')
+    return (
       <div>
-        <Fetch url="http://api.surfline.com/v1/forecasts/2134?resources=surf">
-          <TestComponent />
+        <Fetch onSuccess={greatSuccess} url="http://api.surfline.com/v1/forecasts/4750?resources=surf,analysis,wind,weather,tide,sort&days=25&getAllSpots=false&units=e&usenearshore=true&interpolate=true">
+          <TestComponent pineapple={forecastDates} />
         </Fetch>
       </div>
     )
   }
 }
 
-class TestComponent extends React.Component{
-  render(){
-    console.log(this.props)
-    return <div/>
-  }
-}
 
 export default SurflineData
