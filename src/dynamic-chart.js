@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
-import Fetch from 'react-fetch'
 import Highcharts from 'highcharts'
 import ReactHighcharts from 'react-highcharts'
 
-class TestComponent extends Component{
+class DynamicChart extends Component{
   render(){
-    const surf_conditions = this.props.Sort
+    console.log(this.props, 'type of this.props')
+
     let config = {
       title: {
             text: 'Combination chart'
         },
         xAxis: {
-            categories: ['Apples', 'Oranges', 'Pears', 'Bananas', 'Plums']
+            categories: ['a','b','c','d','e']
         },
         labels: {
             items: [{
@@ -76,46 +76,4 @@ class TestComponent extends Component{
   }
 }
 
-
-class SurflineData extends Component {
-  render() {
-  let forecastDates = []
-  let waveHeights = []
-  let greatSuccess = (data) => {
-    console.log(data.Sort.dateStamp,'<----data.Sort.dateStamp');
-      data.Sort.dateStamp.map((el,index)=>{
-        forecastDates.push(el[0])
-        return forecastDates
-      })
-      data.Sort.height1.map((el,index)=>{
-        waveHeights.push(el[0])
-        return waveHeights
-      })
-    this.setState({
-      _forecastDates: forecastDates,
-      _waveHeights: waveHeights
-    })
-  }
-  console.log(forecastDates,'fd')
-  console.log(waveHeights,'waveHeights')
-    return (
-      <div>
-        <img role="presentation" src="http://camstills.cdn-surfline.com/pipelinecam/latest_full.jpg" />
-        <Fetch onSuccess={greatSuccess} url="http://api.surfline.com/v1/forecasts/4750?resources=surf,analysis,wind,weather,tide,sort&days=25&getAllSpots=false&units=e&usenearshore=true&interpolate=true">
-          <TestComponent />
-        </Fetch>
-      </div>
-    )
-  }
-}
-
-TestComponent.propTypes = {
-  surf_conditions: React.PropTypes.objectOf(React.PropTypes.array)
-}
-
-SurflineData.propTypes = {
-  banana: React.PropTypes.array
-}
-
-
-export default SurflineData
+export default DynamicChart
